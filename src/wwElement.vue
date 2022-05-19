@@ -121,7 +121,7 @@ export default {
     };
   },
   watch: {
-    "content.value"(newValue) {
+    value(newValue) {
       if (newValue === this.value) return;
       this.setValue(newValue);
       this.$emit("trigger-event", {
