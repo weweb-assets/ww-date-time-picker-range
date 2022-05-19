@@ -157,7 +157,7 @@ export default {
       },
     },
     mode() {
-      return this.content.selectAlsoTime ? "dateTime" : "data";
+      return this.content.selectAlsoTime ? "dateTime" : "date";
     },
     locale() {
       if (this.content.lang === "pageLang") {
