@@ -1,0 +1,14 @@
+{
+  "name": "ww-date-time-picker-range",
+  "version": "0.0.1",
+  "scripts": {
+    "build": "weweb build",
+    "serve": "weweb serve"
+  },
+  "devDependencies": {
+    "@weweb/cli": "latest"
+  },
+  "dependencies": {
+    "v-calendar": "^3.0.0-alpha.8"
+  }
+}
