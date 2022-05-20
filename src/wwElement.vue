@@ -85,6 +85,7 @@ export default {
   components: {
     DatePicker,
   },
+  emits: ["update:content"],
   props: {
     content: { type: Object, required: true },
     uid: { type: String, required: true },
@@ -132,6 +133,11 @@ export default {
         start: this.value.start,
         end: newValue,
       };
+    },
+    "content.selectAlsoTime"(newValue) {
+      if (newValue === false) {
+        this.$emit("update:content", { onlyTime: false });
+      }
     },
   },
   computed: {

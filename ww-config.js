@@ -66,6 +66,7 @@ export default {
       section: "settings",
     },
     onlyTime: {
+      hidden: (content) => !content.selectAlsoTime,
       label: {
         en: "Select only time",
       },
