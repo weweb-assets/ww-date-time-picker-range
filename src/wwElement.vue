@@ -18,7 +18,7 @@
     <!-- SHOW ON HOVER -->
     <DatePicker
       v-else-if="content.showOn === 'hover'"
-      class="ww-date-time-picker__picker"
+      class="ww-date-time-picker-range__picker"
       v-model="value"
       :masks="masks"
       :color="content.color"
@@ -31,7 +31,6 @@
     >
       <template v-slot="{ inputValue, inputEvents }">
         <wwElement
-          class="ww-date-time-picker__text"
           v-bind="content.dateElement"
           :wwProps="{ text: inputValue.start }"
           v-on="isEditing ? null : inputEvents.start"
@@ -39,7 +38,6 @@
 
         <wwElement
           v-if="content.startEndInputs"
-          class="ww-date-time-picker__text"
           v-bind="content.dateElement"
           :wwProps="{ text: inputValue.end }"
           v-on="isEditing ? null : inputEvents.end"
@@ -50,7 +48,7 @@
     <!-- SHOW ON CLICK -->
     <DatePicker
       v-else-if="content.showOn === 'click'"
-      class="ww-date-time-picker__picker"
+      class="ww-date-time-picker-range__picker"
       v-model="value"
       :masks="masks"
       :color="content.color"
@@ -63,7 +61,6 @@
     >
       <template v-slot="{ inputValue, togglePopover }">
         <wwElement
-          class="ww-date-time-picker__text"
           v-bind="content.dateElement"
           :wwProps="{ text: inputValue.start }"
           @click="isEditing ? null : togglePopover().start"
@@ -71,7 +68,6 @@
 
         <wwElement
           v-if="content.startEndInputs"
-          class="ww-date-time-picker__text"
           v-bind="content.dateElement"
           :wwProps="{ text: inputValue.end }"
           @click="isEditing ? null : togglePopover().end"
@@ -97,6 +93,10 @@ export default {
     /* wwEditor:end */
   },
   setup(props) {
+    const start = new Date();
+    const end = new Date();
+    end.setDate(end.getDate() + 4);
+
     const { value: variableValue, setValue } =
       wwLib.wwVariable.useComponentVariable({
         uid: props.uid,
@@ -104,21 +104,11 @@ export default {
         type: "object",
         defaultValue:
           props.content.value === undefined
-            ? {
-                start: new Date(2022, 0, 6).toString(),
-                end: new Date(2023, 0, 23).toString(),
-              }
+            ? { start: start.toString(), end: end.toString() }
             : props.content.value,
       });
 
     return { variableValue, setValue };
-  },
-  data() {
-    return {
-      masks: {
-        input: "YYYY-MM-DD h:mm A",
-      },
-    };
   },
   watch: {
     value(newValue) {
@@ -128,6 +118,20 @@ export default {
         name: "initValueChange",
         event: { value: newValue },
       });
+    },
+    "content.initValueStart"(newValue) {
+      if (newValue === this.value.start) return;
+      this.value = {
+        start: newValue,
+        end: this.value.end,
+      };
+    },
+    "content.initValueEnd"(newValue) {
+      if (newValue === this.value.end) return;
+      this.value = {
+        start: this.value.start,
+        end: newValue,
+      };
     },
   },
   computed: {
@@ -148,7 +152,7 @@ export default {
         if (_.isEqual(newValue, oldValue)) return;
 
         const { start, end } = newValue;
-        if (start.toString() && end.toString()) {
+        if (start && start.toString() && end && end.toString()) {
           this.setValue({
             start: start.toString(),
             end: end.toString(),
@@ -157,7 +161,13 @@ export default {
       },
     },
     mode() {
+      if (this.content.onlyTime) return "time";
       return this.content.selectAlsoTime ? "dateTime" : "date";
+    },
+    masks() {
+      return {
+        input: this.content.mask,
+      };
     },
     locale() {
       if (this.content.lang === "pageLang") {
@@ -169,3 +179,12 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.ww-date-time-picker-range {
+  &__picker {
+    display: flex;
+    flex-direction: row;
+  }
+}
+</style>

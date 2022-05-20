@@ -4,6 +4,9 @@ export default {
       en: "Range Date picker",
     },
     customStylePropertiesOrder: ["color", "isDarkMode", ["rows", "columns"]],
+    bubble: {
+      icon: "fontawesome/regular/calendar",
+    },
   },
   triggerEvents: [
     { name: "change", label: { en: "On change" }, event: { value: "" } },
@@ -14,6 +17,22 @@ export default {
     },
   ],
   properties: {
+    initValueStart: {
+      label: {
+        en: "Start init value",
+      },
+      type: "Text",
+      bindable: true,
+      section: "settings",
+    },
+    initValueEnd: {
+      label: {
+        en: "End init value",
+      },
+      type: "Text",
+      bindable: true,
+      section: "settings",
+    },
     showOn: {
       label: {
         en: "Show on",
@@ -46,6 +65,14 @@ export default {
       defaultValue: false,
       section: "settings",
     },
+    onlyTime: {
+      label: {
+        en: "Select only time",
+      },
+      type: "OnOff",
+      defaultValue: false,
+      section: "settings",
+    },
     lang: {
       label: {
         en: "Lang",
@@ -66,6 +93,14 @@ export default {
       },
       defaultValue: "pageLang",
       bindable: true,
+      section: "settings",
+    },
+    mask: {
+      label: {
+        en: "Visualisation format",
+      },
+      type: "Text",
+      defaultValue: "YYYY-MM-DD h:mm A",
       section: "settings",
     },
     color: {
