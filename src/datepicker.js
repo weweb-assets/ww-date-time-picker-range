@@ -3529,6 +3529,7 @@ const _sfc_main$9 = {
     },
     onDocumentShowPopover({ detail }) {
       if (!detail.id || detail.id !== this.id) return;
+      console.log("onDocumentShowPopover", detail);
       this.show(detail);
     },
     onDocumentHidePopover({ detail }) {
@@ -3537,6 +3538,7 @@ const _sfc_main$9 = {
     },
     onDocumentTogglePopover({ detail }) {
       if (!detail.id || detail.id !== this.id) return;
+      console.log("onDocumentTogglePopover", detail);
       this.toggle(detail);
     },
     onDocumentUpdatePopover({ detail }) {
@@ -6637,7 +6639,6 @@ var CalendarNav = /* @__PURE__ */ _export_sfc(_sfc_main$6, [
 ]);
 function showPopover(opts) {
   if (document) {
-    console.log(opts);
     document.dispatchEvent(
       new CustomEvent("show-popover", {
         detail: opts,
@@ -6656,7 +6657,6 @@ function hidePopover(opts) {
 }
 function togglePopover(opts) {
   if (document) {
-    console.log(opts);
     document.dispatchEvent(
       new CustomEvent("toggle-popover", {
         detail: opts,
