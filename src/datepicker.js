@@ -6637,6 +6637,7 @@ var CalendarNav = /* @__PURE__ */ _export_sfc(_sfc_main$6, [
 ]);
 function showPopover(opts) {
   if (document) {
+    console.log(opts);
     document.dispatchEvent(
       new CustomEvent("show-popover", {
         detail: opts,
@@ -6655,6 +6656,7 @@ function hidePopover(opts) {
 }
 function togglePopover(opts) {
   if (document) {
+    console.log(opts);
     document.dispatchEvent(
       new CustomEvent("toggle-popover", {
         detail: opts,

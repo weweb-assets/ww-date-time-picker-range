@@ -24,6 +24,8 @@ function getBoundingClientRect(element) {
 
 /*:: declare function getWindow(node: Node | Window): Window; */
 function getWindow(node) {
+  return wwLib.getFrontWindow();
+
   if (node.toString() !== "[object Window]") {
     var ownerDocument = node.ownerDocument;
     return ownerDocument ? ownerDocument.defaultView : window;
@@ -80,10 +82,10 @@ function getDocumentElement(element) {
   // $FlowFixMe: assume body is always available
 
   // ORIGINAL CODE
-  //   const doc = isElement(element) ? element.ownerDocument : element.document
-  //   const docElem = doc.documentElement
+  // const doc = isElement(element) ? element.ownerDocument : element.document;
+  // const docElem = doc.documentElement;
 
-  //   return docElem
+  // return docElem;
 
   // WEWEB MODIFICATION ->  It work, but we dont know why
   return wwLib.getFrontDocument().documentElement;
@@ -225,6 +227,9 @@ function isTableElement(element) {
 }
 
 function getTrueOffsetParent(element) {
+  // WEWEB MODIFICATIONS
+  return element.offsetParent || null;
+
   if (
     !isHTMLElement(element) || // https://github.com/popperjs/popper-core/issues/837
     getComputedStyle(element).position === "fixed"
@@ -929,6 +934,7 @@ function getMainAxisFromPlacement(placement) {
 }
 
 function computeOffsets(_ref) {
+  // debugger;
   var reference = _ref.reference,
     element = _ref.element,
     placement = _ref.placement;
@@ -993,7 +999,7 @@ function computeOffsets(_ref) {
         break;
     }
   }
-
+  // console.log(offsets);
   return offsets;
 }
 
@@ -1032,8 +1038,9 @@ var unsetSides = {
 function roundOffsets(_ref) {
   var x = _ref.x,
     y = _ref.y;
-  var win = window;
+  var win = wwLib.getFrontWindow();
   var dpr = win.devicePixelRatio || 1;
+
   return {
     x: Math.round(x * dpr) / dpr || 0,
     y: Math.round(y * dpr) / dpr || 0,
@@ -1041,6 +1048,9 @@ function roundOffsets(_ref) {
 }
 
 function mapToStyles(_ref2) {
+  // debugger;
+  // WEWEB Calculation
+  // console.log(_ref2);
   var _Object$assign2;
 
   var popper = _ref2.popper,
@@ -1059,14 +1069,15 @@ function mapToStyles(_ref2) {
   var hasY = offsets.hasOwnProperty("y");
   var sideX = left;
   var sideY = top;
-  var win = window;
+  var win = wwLib.getFrontWindow();
 
   if (adaptive) {
     var offsetParent = getOffsetParent(popper);
 
     if (offsetParent === getWindow(popper)) {
       offsetParent = getDocumentElement(popper);
-    } // $FlowFixMe: force type refinement, we compare offsetParent with window above, but Flow doesn't detect it
+    }
+    // $FlowFixMe: force type refinement, we compare offsetParent with window above, but Flow doesn't detect it
 
     /*:: offsetParent = (offsetParent: Element); */
 
@@ -1089,6 +1100,9 @@ function mapToStyles(_ref2) {
     },
     adaptive && unsetSides
   );
+
+  // WEWEB
+  // console.log("toto", x, y);
 
   if (gpuAcceleration) {
     var _Object$assign;
@@ -1119,6 +1133,7 @@ function mapToStyles(_ref2) {
 }
 
 function computeStyles(_ref3) {
+  // debugger;
   var state = _ref3.state,
     options = _ref3.options;
   var _options$gpuAccelerat = options.gpuAcceleration,

@@ -2,6 +2,7 @@
   <!-- INLINE PICKER -->
   <DatePicker
     v-if="content.showOn === 'alwaysVisible'"
+    key="alwaysVisible"
     class="ww-date-time-picker-range"
     v-model="value"
     :masks="masks"
@@ -17,6 +18,7 @@
   <!-- SHOW ON HOVER -->
   <DatePicker
     v-else-if="content.showOn === 'hover'"
+    key="hover"
     class="ww-date-time-picker-range"
     v-model="value"
     :masks="masks"
@@ -47,6 +49,7 @@
   <!-- SHOW ON CLICK -->
   <DatePicker
     v-else-if="content.showOn === 'click'"
+    key="click"
     class="ww-date-time-picker-range"
     v-model="value"
     :masks="masks"
@@ -62,14 +65,14 @@
       <wwElement
         v-bind="content.dateElement"
         :wwProps="{ text: inputValue.start }"
-        @click="isEditing ? null : togglePopover().start"
+        @click="isEditing ? null : togglePopover()"
       />
 
       <wwElement
         v-if="content.startEndInputs"
         v-bind="content.dateElement"
         :wwProps="{ text: inputValue.end }"
-        @click="isEditing ? null : togglePopover().end"
+        @click="isEditing ? null : togglePopover()"
       />
     </template>
   </DatePicker>
@@ -78,6 +81,7 @@
 <script>
 import { DatePicker } from "./datepicker.js";
 import "v-calendar/dist/style.css";
+
 export default {
   components: {
     DatePicker,

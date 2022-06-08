@@ -45,7 +45,7 @@ export default {
           { value: "click", label: { en: "Click" } },
         ],
       },
-      defaultValue: "hover",
+      defaultValue: "click",
       section: "settings",
     },
     startEndInputs: {
