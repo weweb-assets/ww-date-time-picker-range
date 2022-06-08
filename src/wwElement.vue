@@ -63,18 +63,18 @@
   >
     <template v-slot="{ inputValue, togglePopover }">
       <wwElement
-        ref="start"
+        :data-range-start-id="id"
         v-bind="content.dateElement"
         :wwProps="{ text: inputValue.start }"
-        @click="isEditing ? null : handleClick(togglePopover, $refs.start)"
+        @click="isEditing ? null : handleClick(togglePopover, 'start')"
       />
 
       <wwElement
         v-if="content.startEndInputs"
-        ref="end"
+        :data-range-end-id="id"
         v-bind="content.dateElement"
         :wwProps="{ text: inputValue.end }"
-        @click="isEditing ? null : handleClick(togglePopover, $refs.end)"
+        @click="isEditing ? null : handleClick(togglePopover, 'end')"
       />
     </template>
   </DatePicker>
@@ -97,6 +97,7 @@ export default {
     /* wwEditor:end */
   },
   setup(props) {
+    const id = wwLib.wwUtils.getUniqueId();
     const start = new Date();
     const end = new Date();
     end.setDate(end.getDate() + 4);
@@ -110,7 +111,7 @@ export default {
             ? { start: start.toString(), end: end.toString() }
             : props.content.value,
       });
-    return { variableValue, setValue };
+    return { variableValue, setValue, id };
   },
   watch: {
     value(newValue) {
@@ -184,7 +185,11 @@ export default {
   },
   methods: {
     handleClick(togglePopover, target) {
-      togglePopover({ ref: target.$el.nextElementSibling });
+      const el = wwLib
+        .getFrontDocument()
+        .querySelector(`[data-range-${target}-id='${this.id}']`);
+
+      togglePopover({ ref: el });
     },
   },
 };
