@@ -189,6 +189,8 @@ export default {
         .getFrontDocument()
         .querySelector(`[data-range-${target}-id='${this.id}']`);
 
+      console.log(wwLib.getFrontDocument(), el, togglePopover, target);
+
       togglePopover({ ref: el });
     },
   },
