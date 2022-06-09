@@ -62,24 +62,26 @@
     :locale="locale"
   >
     <template v-slot="{ inputValue, togglePopover }">
-      <wwElement
-        :class="`ww-range-start-${id}`"
-        v-bind="content.dateElement"
-        :wwProps="{ text: inputValue.start }"
-        @click="
-          isEditing ? null : handleClick(togglePopover, `ww-range-start-${id}`)
-        "
-      />
+      <div
+        ref="start"
+        @click="isEditing ? null : handleClick(togglePopover, 'start')"
+      >
+        <wwElement
+          v-bind="content.dateElement"
+          :wwProps="{ text: inputValue.start }"
+        />
+      </div>
 
-      <wwElement
+      <div
         v-if="content.startEndInputs"
-        :class="`ww-range-end-${id}`"
-        v-bind="content.dateElement"
-        :wwProps="{ text: inputValue.end }"
-        @click="
-          isEditing ? null : handleClick(togglePopover, `ww-range-end-${id}`)
-        "
-      />
+        ref="end"
+        @click="isEditing ? null : handleClick(togglePopover, 'end')"
+      >
+        <wwElement
+          v-bind="content.dateElement"
+          :wwProps="{ text: inputValue.end }"
+        />
+      </div>
     </template>
   </DatePicker>
 </template>
@@ -189,9 +191,7 @@ export default {
   },
   methods: {
     handleClick(togglePopover, target) {
-      const el = wwLib.getFrontDocument().querySelector(`.${target}`);
-      console.log(el);
-      togglePopover({ ref: el });
+      togglePopover({ ref: this.$refs[target] });
     },
   },
 };
