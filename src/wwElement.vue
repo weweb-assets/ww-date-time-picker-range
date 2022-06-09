@@ -109,7 +109,6 @@ export default {
     /* wwEditor:end */
   },
   setup(props) {
-    const id = wwLib.wwUtils.getUniqueId();
     const start = new Date();
     const end = new Date();
     end.setDate(end.getDate() + 4);
@@ -123,7 +122,7 @@ export default {
             ? { start: start.toString(), end: end.toString() }
             : props.content.value,
       });
-    return { variableValue, setValue, id };
+    return { variableValue, setValue };
   },
   data() {
     return {
