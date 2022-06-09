@@ -2,7 +2,7 @@
   <!-- INLINE PICKER -->
   <DatePicker
     v-if="content.showOn === 'alwaysVisible'"
-    key="alwaysVisible"
+    :key="'alwaysVisible-' + componentKey"
     class="ww-date-time-picker-range"
     v-model="value"
     :masks="masks"
@@ -18,7 +18,7 @@
   <!-- SHOW ON HOVER -->
   <DatePicker
     v-else-if="content.showOn === 'hover'"
-    key="hover"
+    :key="'hover-' + componentKey"
     class="ww-date-time-picker-range"
     v-model="value"
     :masks="masks"
@@ -35,6 +35,7 @@
         v-bind="content.dateElement"
         :wwProps="{ text: inputValue.start }"
         v-on="isEditing ? null : inputEvents.start"
+        @mouseenter.stop="handleMouseEnter"
       />
 
       <wwElement
@@ -42,6 +43,7 @@
         v-bind="content.dateElement"
         :wwProps="{ text: inputValue.end }"
         v-on="isEditing ? null : inputEvents.end"
+        @mouseenter.stop="handleMouseEnter"
       />
     </template>
   </DatePicker>
@@ -49,7 +51,7 @@
   <!-- SHOW ON CLICK -->
   <DatePicker
     v-else-if="content.showOn === 'click'"
-    key="click"
+    :key="'click-' + componentKey"
     class="ww-date-time-picker-range"
     v-model="value"
     :masks="masks"
@@ -65,6 +67,7 @@
       <div
         ref="start"
         @click="isEditing ? null : handleClick(togglePopover, 'start')"
+        @mouseenter.stop="handleMouseEnter"
       >
         <wwElement
           v-bind="content.dateElement"
@@ -76,6 +79,7 @@
         v-if="content.startEndInputs"
         ref="end"
         @click="isEditing ? null : handleClick(togglePopover, 'end')"
+        @mouseenter.stop="handleMouseEnter"
       >
         <wwElement
           v-bind="content.dateElement"
@@ -118,6 +122,11 @@ export default {
             : props.content.value,
       });
     return { variableValue, setValue, id };
+  },
+  data() {
+    return {
+      componentKey: 0,
+    };
   },
   watch: {
     value(newValue) {
@@ -192,6 +201,9 @@ export default {
   methods: {
     handleClick(togglePopover, target) {
       togglePopover({ ref: this.$refs[target] });
+    },
+    handleMouseEnter() {
+      this.componentKey += 1;
     },
   },
 };
