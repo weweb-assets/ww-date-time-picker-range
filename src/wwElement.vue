@@ -29,6 +29,7 @@
     :rows="content.rows"
     :columns="content.columns"
     :locale="locale"
+    :style="style"
   >
     <template v-slot="{ inputValue, inputEvents }">
       <wwElement
@@ -62,6 +63,7 @@
     :rows="content.rows"
     :columns="content.columns"
     :locale="locale"
+    :style="style"
   >
     <template v-slot="{ inputValue, togglePopover }">
       <div
@@ -197,6 +199,12 @@ export default {
       }
       return this.content.lang;
     },
+    style() {
+      return {
+        "--direction": this.content.direction,
+        "--alignement": this.content.alignement,
+      };
+    },
   },
   methods: {
     handleClick(togglePopover, target) {
@@ -211,7 +219,11 @@ export default {
 
 <style lang="scss" scoped>
 .ww-date-time-picker-range {
+  width: 100%;
+  height: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: var(--direction);
+  justify-content: var(--alignement);
+  align-items: var(--alignement);
 }
 </style>
