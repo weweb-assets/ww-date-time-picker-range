@@ -3,7 +3,13 @@ export default {
     label: {
       en: "Range Date picker",
     },
-    customStylePropertiesOrder: ["color", "isDarkMode", ["rows", "columns"]],
+    customStylePropertiesOrder: [
+      "direction",
+      "alignement",
+      "color",
+      "isDarkMode",
+      ["rows", "columns"],
+    ],
     bubble: {
       icon: "fontawesome/regular/calendar",
     },
@@ -158,6 +164,82 @@ export default {
       }),
       responsive: true,
       defaultValue: 1,
+    },
+    direction: {
+      label: {
+        en: "Direction",
+        fr: "Direction",
+      },
+      type: "TextSelect",
+      options: {
+        options: [
+          { value: "row", label: { en: "Horizontal" } },
+          { value: "column", label: { en: "Vertical" } },
+        ],
+      },
+      responsive: true,
+      defaultValue: "row",
+    },
+    alignement: {
+      label: {
+        en: "Alignement",
+      },
+      type: "TextRadioGroup",
+      options: (content) => {
+        if (content.direction === "row") {
+          return {
+            choices: [
+              {
+                value: "flex-start",
+                title: { en: "Start", fr: "Début" },
+                icon: "align-x-start",
+              },
+              {
+                value: "center",
+                title: { en: "Center", fr: "Milieu" },
+                icon: "align-x-center",
+              },
+              {
+                value: "flex-end",
+                title: { en: "End", fr: "Fin" },
+                icon: "align-x-end",
+              },
+              {
+                value: "space-around",
+                title: { en: "Space around", fr: "Space around" },
+                icon: "align-x-space-around",
+              },
+              {
+                value: "space-between",
+                title: { en: "Space between", fr: "Space between" },
+                icon: "align-x-space-between",
+              },
+            ],
+          };
+        } else {
+          return {
+            choices: [
+              {
+                value: "start",
+                title: { en: "Start", fr: "Début" },
+                icon: "align-left",
+              },
+              {
+                value: "center",
+                title: { en: "Center", fr: "Milieu" },
+                icon: "align-center",
+              },
+              {
+                value: "end",
+                title: { en: "End", fr: "Fin" },
+                icon: "align-right",
+              },
+            ],
+          };
+        }
+      },
+      responsive: true,
+      defaultValue: "center",
     },
     dateElement: {
       hidden: true,

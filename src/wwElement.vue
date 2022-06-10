@@ -2,6 +2,7 @@
   <!-- INLINE PICKER -->
   <DatePicker
     v-if="content.showOn === 'alwaysVisible'"
+    :key="'alwaysVisible-' + componentKey"
     class="ww-date-time-picker-range"
     v-model="value"
     :masks="masks"
@@ -17,6 +18,7 @@
   <!-- SHOW ON HOVER -->
   <DatePicker
     v-else-if="content.showOn === 'hover'"
+    :key="'hover-' + componentKey"
     class="ww-date-time-picker-range"
     v-model="value"
     :masks="masks"
@@ -27,12 +29,14 @@
     :rows="content.rows"
     :columns="content.columns"
     :locale="locale"
+    :style="style"
   >
     <template v-slot="{ inputValue, inputEvents }">
       <wwElement
         v-bind="content.dateElement"
         :wwProps="{ text: inputValue.start }"
         v-on="isEditing ? null : inputEvents.start"
+        @mouseenter.stop="handleMouseEnter"
       />
 
       <wwElement
@@ -40,6 +44,7 @@
         v-bind="content.dateElement"
         :wwProps="{ text: inputValue.end }"
         v-on="isEditing ? null : inputEvents.end"
+        @mouseenter.stop="handleMouseEnter"
       />
     </template>
   </DatePicker>
@@ -47,6 +52,7 @@
   <!-- SHOW ON CLICK -->
   <DatePicker
     v-else-if="content.showOn === 'click'"
+    :key="'click-' + componentKey"
     class="ww-date-time-picker-range"
     v-model="value"
     :masks="masks"
@@ -57,20 +63,31 @@
     :rows="content.rows"
     :columns="content.columns"
     :locale="locale"
+    :style="style"
   >
     <template v-slot="{ inputValue, togglePopover }">
-      <wwElement
-        v-bind="content.dateElement"
-        :wwProps="{ text: inputValue.start }"
-        @click="isEditing ? null : togglePopover().start"
-      />
+      <div
+        ref="start"
+        @click="isEditing ? null : handleClick(togglePopover, 'start')"
+        @mouseenter.stop="handleMouseEnter"
+      >
+        <wwElement
+          v-bind="content.dateElement"
+          :wwProps="{ text: inputValue.start }"
+        />
+      </div>
 
-      <wwElement
+      <div
         v-if="content.startEndInputs"
-        v-bind="content.dateElement"
-        :wwProps="{ text: inputValue.end }"
-        @click="isEditing ? null : togglePopover().end"
-      />
+        ref="end"
+        @click="isEditing ? null : handleClick(togglePopover, 'end')"
+        @mouseenter.stop="handleMouseEnter"
+      >
+        <wwElement
+          v-bind="content.dateElement"
+          :wwProps="{ text: inputValue.end }"
+        />
+      </div>
     </template>
   </DatePicker>
 </template>
@@ -78,6 +95,7 @@
 <script>
 import { DatePicker } from "./datepicker.js";
 import "v-calendar/dist/style.css";
+
 export default {
   components: {
     DatePicker,
@@ -105,6 +123,11 @@ export default {
             : props.content.value,
       });
     return { variableValue, setValue };
+  },
+  data() {
+    return {
+      componentKey: 0,
+    };
   },
   watch: {
     value(newValue) {
@@ -175,13 +198,31 @@ export default {
       }
       return this.content.lang;
     },
+    style() {
+      return {
+        "--direction": this.content.direction,
+        "--alignement": this.content.alignement,
+      };
+    },
+  },
+  methods: {
+    handleClick(togglePopover, target) {
+      togglePopover({ ref: this.$refs[target] });
+    },
+    handleMouseEnter() {
+      this.componentKey += 1;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .ww-date-time-picker-range {
+  width: 100%;
+  height: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: var(--direction);
+  justify-content: var(--alignement);
+  align-items: var(--alignement);
 }
 </style>
