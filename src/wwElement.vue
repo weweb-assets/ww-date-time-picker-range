@@ -109,19 +109,25 @@ export default {
     /* wwEditor:end */
   },
   setup(props) {
-    const start = new Date();
-    const end = new Date();
-    end.setDate(end.getDate() + 4);
+    const start =
+      props.content.initValueStart === undefined
+        ? new Date().toString()
+        : props.content.initValueStart;
+
+    let end = new Date();
+    end =
+      props.content.initValueEnd === undefined
+        ? end.setDate(end.getDate() + 4)
+        : props.content.initValueEnd;
+
     const { value: variableValue, setValue } =
       wwLib.wwVariable.useComponentVariable({
         uid: props.uid,
         name: "value",
         type: "object",
-        defaultValue:
-          props.content.value === undefined
-            ? { start: start.toString(), end: end.toString() }
-            : props.content.value,
+        defaultValue: { start, end },
       });
+
     return { variableValue, setValue };
   },
   data() {
@@ -218,8 +224,6 @@ export default {
 
 <style lang="scss" scoped>
 .ww-date-time-picker-range {
-  width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: var(--direction);
   justify-content: var(--alignement);
