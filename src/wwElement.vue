@@ -123,7 +123,7 @@ export default {
     const { value: variableValueStart, setValue: setValueStart } =
       wwLib.wwVariable.useComponentVariable({
         uid: props.uid,
-        name: "value - start",
+        name: "Start value",
         type: "string",
         defaultValue: start,
       });
@@ -131,7 +131,7 @@ export default {
     const { value: variableValueEnd, setValue: setValueEnd } =
       wwLib.wwVariable.useComponentVariable({
         uid: props.uid,
-        name: "value - end",
+        name: "End value",
         type: "string",
         defaultValue: end,
       });
