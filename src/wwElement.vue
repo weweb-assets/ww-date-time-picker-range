@@ -190,8 +190,8 @@ export default {
     value: {
       get() {
         return {
-          start: this.valueStart,
-          end: this.valueEnd,
+          start: this.startDate,
+          end: this.endDate,
         };
       },
       set(newValue) {
@@ -199,9 +199,18 @@ export default {
         this.valueEnd = newValue.end;
       },
     },
+    startDate() {
+      // date as object for the datepicker
+      return new Date(this.valueStart);
+    },
+    endDate() {
+      // date as object for the datepicker
+      return new Date(this.valueEnd);
+    },
     valueStart: {
       get() {
-        return new Date(this.variableValueStart);
+        // Date as string for weweb variable
+        return this.variableValueStart;
       },
       set(newValue, oldValue) {
         if (newValue === oldValue) return;
@@ -210,7 +219,8 @@ export default {
     },
     valueEnd: {
       get() {
-        return new Date(this.variableValueEnd);
+        // Date as string for weweb variable
+        return this.variableValueEnd;
       },
       set(newValue, oldValue) {
         if (newValue === oldValue) return;
