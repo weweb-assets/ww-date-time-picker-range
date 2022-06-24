@@ -190,8 +190,8 @@ export default {
     value: {
       get() {
         return {
-          start: new Date(this.valueStart),
-          end: new Date(this.valueEnd),
+          start: this.valueStart,
+          end: this.valueEnd,
         };
       },
       set(newValue) {
@@ -201,7 +201,7 @@ export default {
     },
     valueStart: {
       get() {
-        return this.variableValueStart;
+        return new Date(this.variableValueStart);
       },
       set(newValue, oldValue) {
         if (newValue === oldValue) return;
@@ -210,7 +210,7 @@ export default {
     },
     valueEnd: {
       get() {
-        return this.variableValueEnd;
+        return new Date(this.variableValueEnd);
       },
       set(newValue, oldValue) {
         if (newValue === oldValue) return;
