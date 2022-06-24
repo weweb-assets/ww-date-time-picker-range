@@ -111,47 +111,65 @@ export default {
   setup(props) {
     const start =
       props.content.initValueStart === undefined
-        ? new Date().toString()
+        ? new Date()
         : props.content.initValueStart;
 
-    let end = new Date();
-    end =
+    const d = new Date();
+    const end =
       props.content.initValueEnd === undefined
-        ? end.setDate(end.getDate() + 4)
+        ? new Date(d.setDate(d.getDate() + 5))
         : props.content.initValueEnd;
 
-    const { value: variableValue, setValue } =
+    const { value: variableValueStart, setValue: setValueStart } =
       wwLib.wwVariable.useComponentVariable({
         uid: props.uid,
-        name: "value",
-        type: "object",
-        defaultValue: { start, end },
+        name: "value - start",
+        type: "string",
+        defaultValue: start,
       });
 
-    return { variableValue, setValue };
+    const { value: variableValueEnd, setValue: setValueEnd } =
+      wwLib.wwVariable.useComponentVariable({
+        uid: props.uid,
+        name: "value - end",
+        type: "string",
+        defaultValue: end,
+      });
+
+    return { variableValueStart, variableValueEnd, setValueStart, setValueEnd };
   },
   watch: {
-    value(newValue) {
-      if (newValue === this.value) return;
-      this.setValue(newValue);
+    valueStart(newValue) {
+      if (newValue === this.valueStart) return;
+      this.setValueStart(newValue);
+      this.$emit("trigger-event", {
+        name: "change",
+        event: { value: newValue },
+      });
+    },
+    valueEnd(newValue) {
+      if (newValue === this.valueStart) return;
+      this.setValueEnd(newValue);
+      this.$emit("trigger-event", {
+        name: "change",
+        event: { value: newValue },
+      });
+    },
+    "content.initValueStart"(newValue) {
+      if (newValue === this.valueStart) return;
+      this.valueStart = newValue;
       this.$emit("trigger-event", {
         name: "initValueChange",
         event: { value: newValue },
       });
     },
-    "content.initValueStart"(newValue) {
-      if (newValue === this.value.start) return;
-      this.value = {
-        start: newValue,
-        end: this.value.end,
-      };
-    },
     "content.initValueEnd"(newValue) {
-      if (newValue === this.value.end) return;
-      this.value = {
-        start: this.value.start,
-        end: newValue,
-      };
+      if (newValue === this.valueEnd) return;
+      this.valueEnd = newValue;
+      this.$emit("trigger-event", {
+        name: "initValueChange",
+        event: { value: newValue },
+      });
     },
     "content.selectAlsoTime"(newValue) {
       if (newValue === false) {
@@ -171,17 +189,32 @@ export default {
     },
     value: {
       get() {
-        return this.variableValue;
+        return {
+          start: new Date(this.valueStart),
+          end: new Date(this.valueEnd),
+        };
+      },
+      set(newValue) {
+        this.valueStart = newValue.start;
+        this.valueEnd = newValue.end;
+      },
+    },
+    valueStart: {
+      get() {
+        return this.variableValueStart;
       },
       set(newValue, oldValue) {
-        if (_.isEqual(newValue, oldValue)) return;
-        const { start, end } = newValue;
-        if (start && start.toString() && end && end.toString()) {
-          this.setValue({
-            start: start.toString(),
-            end: end.toString(),
-          });
-        }
+        if (newValue === oldValue) return;
+        if (newValue.toString()) this.setValueStart(newValue.toString());
+      },
+    },
+    valueEnd: {
+      get() {
+        return this.variableValueEnd;
+      },
+      set(newValue, oldValue) {
+        if (newValue === oldValue) return;
+        if (newValue.toString()) this.setValueEnd(newValue.toString());
       },
     },
     mode() {
