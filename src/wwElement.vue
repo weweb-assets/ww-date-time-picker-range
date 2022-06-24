@@ -123,7 +123,7 @@ export default {
     const { value: variableValueStart, setValue: setValueStart } =
       wwLib.wwVariable.useComponentVariable({
         uid: props.uid,
-        name: "Start value",
+        name: "start",
         type: "string",
         defaultValue: start,
       });
@@ -131,7 +131,7 @@ export default {
     const { value: variableValueEnd, setValue: setValueEnd } =
       wwLib.wwVariable.useComponentVariable({
         uid: props.uid,
-        name: "End value",
+        name: "end",
         type: "string",
         defaultValue: end,
       });
@@ -249,6 +249,7 @@ export default {
 
 <style lang="scss" scoped>
 .ww-date-time-picker-range {
+  width: 100%;
   display: flex;
   flex-direction: var(--direction);
   justify-content: var(--alignement);
