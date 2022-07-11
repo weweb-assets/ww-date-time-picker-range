@@ -139,32 +139,32 @@ export default {
     return { variableValueStart, variableValueEnd, setValueStart, setValueEnd };
   },
   watch: {
-    valueStart(newValue) {
-      if (newValue === this.valueStart) return;
+    valueStart(newValue, oldValue) {
+      if (newValue === oldValue) return;
       this.setValueStart(newValue);
       this.$emit("trigger-event", {
         name: "change",
         event: { value: newValue },
       });
     },
-    valueEnd(newValue) {
-      if (newValue === this.valueStart) return;
+    valueEnd(newValue, oldValue) {
+      if (newValue === oldValue) return;
       this.setValueEnd(newValue);
       this.$emit("trigger-event", {
         name: "change",
         event: { value: newValue },
       });
     },
-    "content.initValueStart"(newValue) {
-      if (newValue === this.valueStart) return;
+    "content.initValueStart"(newValue, oldValue) {
+      if (newValue === oldValue) return;
       this.valueStart = newValue;
       this.$emit("trigger-event", {
         name: "initValueChange",
         event: { value: newValue },
       });
     },
-    "content.initValueEnd"(newValue) {
-      if (newValue === this.valueEnd) return;
+    "content.initValueEnd"(newValue, oldValue) {
+      if (newValue === oldValue) return;
       this.valueEnd = newValue;
       this.$emit("trigger-event", {
         name: "initValueChange",
@@ -214,7 +214,8 @@ export default {
       },
       set(newValue, oldValue) {
         if (newValue === oldValue) return;
-        if (newValue.toString()) this.setValueStart(newValue.toString());
+        if (newValue.toString())
+          this.setValueStart(this.ajustStartDate(newValue).toString());
       },
     },
     valueEnd: {
@@ -224,7 +225,8 @@ export default {
       },
       set(newValue, oldValue) {
         if (newValue === oldValue) return;
-        if (newValue.toString()) this.setValueEnd(newValue.toString());
+        if (newValue.toString())
+          this.setValueEnd(this.ajustEndDate(newValue).toString());
       },
     },
     mode() {
@@ -252,6 +254,20 @@ export default {
   methods: {
     handleClick(togglePopover, target) {
       togglePopover({ ref: this.$refs[target] });
+    },
+    ajustStartDate(date) {
+      if (this.mode === "date") {
+        return new Date(new Date(date).setHours(0, 0, 0));
+      }
+
+      return date;
+    },
+    ajustEndDate(date) {
+      if (this.mode === "date") {
+        return new Date(new Date(date).setHours(23, 59, 59));
+      }
+
+      return date;
     },
   },
 };
