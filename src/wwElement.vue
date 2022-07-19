@@ -212,7 +212,10 @@ export default {
           if (this.value.end !== newValueEnd) this.setValueEnd(newValueEnd);
           this.$emit("trigger-event", {
             name: "change",
-            event: { value: newValue },
+            event: { value: {
+              start: newValueStart,
+              end: newValueEnd
+            } },
           });
         }
         
