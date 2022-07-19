@@ -93,8 +93,21 @@
 </template>
 
 <script>
+import { computed } from "vue";
 import { DatePicker } from "./datepicker.js";
 import "v-calendar/dist/style.css";
+
+// TODO : Check if date is valid and apply toString here
+const sanitizeDate = (date, mode = "date", type = "start") => {
+  const formattedDate = new Date(date)
+  if (mode === "date") {
+    type === "start" ? 
+      formattedDate.setHours(0, 0, 0) : 
+      formattedDate.setHours(23, 59, 59);
+  }
+
+  return formattedDate;
+}
 
 export default {
   components: {
@@ -109,6 +122,10 @@ export default {
     /* wwEditor:end */
   },
   setup(props) {
+    const mode = computed(() => {
+      if (props.content.onlyTime) return "time";
+      return props.content.selectAlsoTime ? "dateTime" : "date";
+    })
     const start =
       props.content.initValueStart === undefined
         ? new Date()
@@ -125,7 +142,7 @@ export default {
         uid: props.uid,
         name: "start",
         type: "string",
-        defaultValue: start,
+        defaultValue: sanitizeDate(start, mode.value, "start").toString(),
       });
 
     const { value: variableValueEnd, setValue: setValueEnd } =
@@ -133,39 +150,31 @@ export default {
         uid: props.uid,
         name: "end",
         type: "string",
-        defaultValue: end,
+        defaultValue: sanitizeDate(end, mode.value, "end").toString(),
       });
 
-    return { variableValueStart, variableValueEnd, setValueStart, setValueEnd };
+    return { mode, variableValueStart, variableValueEnd, setValueStart, setValueEnd };
   },
   watch: {
-    valueStart(newValue, oldValue) {
-      if (newValue === oldValue) return;
-      this.setValueStart(newValue);
-      this.$emit("trigger-event", {
-        name: "change",
-        event: { value: newValue },
-      });
-    },
-    valueEnd(newValue, oldValue) {
-      if (newValue === oldValue) return;
-      this.setValueEnd(newValue);
-      this.$emit("trigger-event", {
-        name: "change",
-        event: { value: newValue },
-      });
-    },
     "content.initValueStart"(newValue, oldValue) {
-      if (newValue === oldValue) return;
-      this.valueStart = newValue;
+      const newValueFormatted = sanitizeDate(newValue, this.mode, "start").toString() 
+      const oldValueFormatted = sanitizeDate(oldValue, this.mode, "start").toString()
+      const isSame = newValueFormatted === oldValueFormatted
+      if (isSame) return;
+      // TODO : initValueStart is triggered multiple time, it can cause issue in datetime and time mode
+      this.setValueStart(newValueFormatted)
       this.$emit("trigger-event", {
         name: "initValueChange",
         event: { value: newValue },
       });
     },
     "content.initValueEnd"(newValue, oldValue) {
-      if (newValue === oldValue) return;
-      this.valueEnd = newValue;
+      const newValueFormatted = sanitizeDate(newValue, this.mode, "end").toString() 
+      const oldValueFormatted = sanitizeDate(oldValue, this.mode, "end").toString()
+      const isSame = newValueFormatted === oldValueFormatted
+      if (isSame) return;
+      // TODO : initValueEnd is triggered multiple time, it can cause issue in datetime and time mode
+      this.setValueEnd(newValueFormatted)
       this.$emit("trigger-event", {
         name: "initValueChange",
         event: { value: newValue },
@@ -190,48 +199,24 @@ export default {
     value: {
       get() {
         return {
-          start: this.startDate,
-          end: this.endDate,
+          start: new Date(this.variableValueStart),
+          end: new Date(this.variableValueEnd),
         };
       },
       set(newValue) {
-        this.valueStart = newValue.start;
-        this.valueEnd = newValue.end;
+        const newValueStart = sanitizeDate(newValue.start, this.mode, "start").toString()
+        const newValueEnd = sanitizeDate(newValue.end, this.mode, "end").toString()
+
+        if (this.value.start !== newValueStart || this.value.end !== newValueEnd) {
+          if (this.value.start !== newValueStart) this.setValueStart(newValueStart);
+          if (this.value.end !== newValueEnd) this.setValueEnd(newValueEnd);
+          this.$emit("trigger-event", {
+            name: "change",
+            event: { value: newValue },
+          });
+        }
+        
       },
-    },
-    startDate() {
-      // date as object for the datepicker
-      return new Date(this.valueStart);
-    },
-    endDate() {
-      // date as object for the datepicker
-      return new Date(this.valueEnd);
-    },
-    valueStart: {
-      get() {
-        // Date as string for weweb variable
-        return this.variableValueStart;
-      },
-      set(newValue, oldValue) {
-        if (newValue === oldValue) return;
-        if (newValue.toString())
-          this.setValueStart(this.ajustStartDate(newValue).toString());
-      },
-    },
-    valueEnd: {
-      get() {
-        // Date as string for weweb variable
-        return this.variableValueEnd;
-      },
-      set(newValue, oldValue) {
-        if (newValue === oldValue) return;
-        if (newValue.toString())
-          this.setValueEnd(this.ajustEndDate(newValue).toString());
-      },
-    },
-    mode() {
-      if (this.content.onlyTime) return "time";
-      return this.content.selectAlsoTime ? "dateTime" : "date";
     },
     masks() {
       return {
@@ -254,21 +239,7 @@ export default {
   methods: {
     handleClick(togglePopover, target) {
       togglePopover({ ref: this.$refs[target] });
-    },
-    ajustStartDate(date) {
-      if (this.mode === "date") {
-        return new Date(new Date(date).setHours(0, 0, 0));
-      }
-
-      return date;
-    },
-    ajustEndDate(date) {
-      if (this.mode === "date") {
-        return new Date(new Date(date).setHours(23, 59, 59));
-      }
-
-      return date;
-    },
+    }
   },
 };
 </script>

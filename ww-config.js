@@ -15,7 +15,7 @@ export default {
     },
   },
   triggerEvents: [
-    { name: "change", label: { en: "On change" }, event: { value: "" } },
+    { name: "change", label: { en: "On change" }, event: { value: { start: new Date().toString(), end: new Date().toString() } } },
     {
       name: "initValueChange",
       label: { en: "On init value change" },
