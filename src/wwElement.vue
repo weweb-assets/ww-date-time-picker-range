@@ -99,13 +99,14 @@ import "v-calendar/dist/style.css";
 
 // TODO : Check if date is valid and apply toString here
 const sanitizeDate = (date, mode = "date", type = "start") => {
+  const formattedDate = new Date(date)
   if (mode === "date") {
-    return type === "start" ? 
-      new Date(new Date(date).setHours(0, 0, 0)) : 
-      new Date(new Date(date).setHours(23, 59, 59));
+    type === "start" ? 
+      formattedDate.setHours(0, 0, 0) : 
+      formattedDate.setHours(23, 59, 59);
   }
 
-  return date;
+  return formattedDate;
 }
 
 export default {
