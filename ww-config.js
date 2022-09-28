@@ -30,6 +30,11 @@ export default {
       type: "Text",
       bindable: true,
       section: "settings",
+      bindingValidation: {
+        type: "string",
+        tooltip: 'A string ISO date: `"2021-03-11T10:11:20.000+00:00"`',
+      },
+      /* wwEditor:end */
     },
     initValueEnd: {
       label: {
@@ -38,6 +43,11 @@ export default {
       type: "Text",
       bindable: true,
       section: "settings",
+      bindingValidation: {
+        type: "string",
+        tooltip: 'A string ISO date: `"2021-03-11T10:11:20.000+00:00"`',
+      },
+      /* wwEditor:end */
     },
     showOn: {
       label: {
@@ -101,6 +111,12 @@ export default {
       defaultValue: "pageLang",
       bindable: true,
       section: "settings",
+      /* wwEditor:start */
+      bindingValidation: {
+        type: "string",
+        tooltip: 'A string that defines the lang: `"en" | "es" | "fr"`',
+      },
+      /* wwEditor:end */
     },
     mask: {
       label: {
