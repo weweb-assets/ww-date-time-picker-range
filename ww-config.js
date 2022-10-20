@@ -11,7 +11,7 @@ export default {
       ["rows", "columns"],
     ],
     bubble: {
-      icon: "fontawesome/regular/calendar",
+      icon: "calendar",
     },
   },
   triggerEvents: [
