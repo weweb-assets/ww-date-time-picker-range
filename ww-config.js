@@ -15,7 +15,13 @@ export default {
     },
   },
   triggerEvents: [
-    { name: "change", label: { en: "On change" }, event: { value: { start: new Date().toString(), end: new Date().toString() } } },
+    {
+      name: "change",
+      label: { en: "On change" },
+      event: {
+        value: { start: new Date().toString(), end: new Date().toString() },
+      },
+    },
     {
       name: "initValueChange",
       label: { en: "On init value change" },
@@ -31,9 +37,11 @@ export default {
       bindable: true,
       defaultValue: "Fri May 20 2022 00:00:00 GMT+0200",
       section: "settings",
+      /* wwEditor:start */
       bindingValidation: {
         type: "string",
-        tooltip: 'A string ISO date: `"2021-03-11T10:11:20.000+00:00"`',
+        tooltip:
+          'A string, <a href="https://en.wikipedia.org/wiki/ISO_8601" target="_blank">ISO Date</a> or <a href="https://en.wikipedia.org/wiki/Unix_time" target="_blank">Timestamp</a>: `"2021-03-11T10:11:20.000+00:00"` or `"1667825290"`',
       },
       /* wwEditor:end */
     },
@@ -116,7 +124,8 @@ export default {
       /* wwEditor:start */
       bindingValidation: {
         type: "string",
-        tooltip: 'A string that defines the lang: `"en" | "es" | "fr"`',
+        tooltip:
+          'A string that defines the lang: `"en" | "es" | "fr"` or `"pageLang"` for de current page lang',
       },
       /* wwEditor:end */
     },
