@@ -224,6 +224,8 @@ export default {
     masks() {
       return {
         input: this.content.mask,
+        inputTime: this.content.mask,
+        inputDateTime: this.content.mask
       };
     },
     locale() {
