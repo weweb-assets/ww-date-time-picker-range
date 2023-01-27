@@ -142,7 +142,7 @@ export default {
         uid: props.uid,
         name: "start",
         type: "string",
-        defaultValue: sanitizeDate(start, mode.value, "start").toString(),
+        defaultValue: computed(() => sanitizeDate(start, mode.value, "start").toString()),
       });
 
     const { value: variableValueEnd, setValue: setValueEnd } =
@@ -150,7 +150,7 @@ export default {
         uid: props.uid,
         name: "end",
         type: "string",
-        defaultValue: sanitizeDate(end, mode.value, "end").toString(),
+        defaultValue: computed(() => sanitizeDate(end, mode.value, "end").toString()),
       });
 
     return { mode, variableValueStart, variableValueEnd, setValueStart, setValueEnd };
