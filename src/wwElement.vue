@@ -126,23 +126,19 @@ export default {
       if (props.content.onlyTime) return "time";
       return props.content.selectAlsoTime ? "dateTime" : "date";
     })
-    const start =
-      props.content.initValueStart === undefined
-        ? new Date()
-        : props.content.initValueStart;
-
-    const d = new Date();
-    const end =
-      props.content.initValueEnd === undefined
-        ? new Date(d.setDate(d.getDate() + 5))
-        : props.content.initValueEnd;
-
+   
     const { value: variableValueStart, setValue: setValueStart } =
       wwLib.wwVariable.useComponentVariable({
         uid: props.uid,
         name: "start",
         type: "string",
-        defaultValue: sanitizeDate(start, mode.value, "start").toString(),
+        defaultValue: computed(() => {
+          const start =
+            props.content.initValueStart === undefined
+              ? new Date()
+              : props.content.initValueStart;
+          return sanitizeDate(start, mode.value, "start").toString()
+        }),
       });
 
     const { value: variableValueEnd, setValue: setValueEnd } =
@@ -150,7 +146,14 @@ export default {
         uid: props.uid,
         name: "end",
         type: "string",
-        defaultValue: sanitizeDate(end, mode.value, "end").toString(),
+        defaultValue: computed(() => {
+          const d = new Date();
+          const end =
+            props.content.initValueEnd === undefined
+              ? new Date(d.setDate(d.getDate() + 5))
+              : props.content.initValueEnd;
+          return sanitizeDate(end, mode.value, "end").toString()
+        }),
       });
 
     return { mode, variableValueStart, variableValueEnd, setValueStart, setValueEnd };
