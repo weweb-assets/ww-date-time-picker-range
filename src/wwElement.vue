@@ -95,7 +95,7 @@
 <script>
 import { computed } from "vue";
 import { DatePicker } from "./datepicker.js";
-import "v-calendar/dist/style.css";
+import "./style.css";
 
 // TODO : Check if date is valid and apply toString here
 const sanitizeDate = (date, mode = "date", type = "start") => {
