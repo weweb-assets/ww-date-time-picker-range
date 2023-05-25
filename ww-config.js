@@ -13,6 +13,7 @@ export default {
     bubble: {
       icon: "calendar",
     },
+    deprecated: 'Use a date picker from the Elements panel instead of this one.',
   },
   triggerEvents: [
     {
