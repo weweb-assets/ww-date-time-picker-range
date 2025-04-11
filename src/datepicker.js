@@ -58,7 +58,7 @@ import {
   mergeProps,
   withModifiers,
 } from "vue";
-import { createPopper } from "./popper.mjs";
+import { createPopper } from "./popper.cjs";
 function toInteger(dirtyNumber) {
   if (dirtyNumber === null || dirtyNumber === true || dirtyNumber === false) {
     return NaN;
