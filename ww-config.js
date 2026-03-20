@@ -22,11 +22,13 @@ export default {
       event: {
         value: { start: new Date().toString(), end: new Date().toString() },
       },
+        description: "Run when the value changes.",
     },
     {
       name: "initValueChange",
       label: { en: "On init value change" },
       event: { value: "" },
+        description: "Run when the initial value changes.",
     },
   ],
   properties: {
