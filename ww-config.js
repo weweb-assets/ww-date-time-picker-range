@@ -22,7 +22,7 @@ export default {
       event: {
         value: { start: new Date().toString(), end: new Date().toString() },
       },
-        description: "Run when the value changes.",
+        description: "Run when the selected date range changes.",
     },
     {
       name: "initValueChange",
